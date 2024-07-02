@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 import numpy as np
 import pickle
 
@@ -6,6 +7,7 @@ import pickle
 model = pickle.load(open('model.pkl', 'rb'))
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 @app.route('/')
 def index():
@@ -16,10 +18,10 @@ def predict():
     try:
         # Get the JSON data from the request
         data = request.get_json(force=True)
-        
+
         # Extract features from the JSON data
         N = data.get('Nitrogen')
-        P = data.get('Phosporus')
+        P = data.get('Phosphorus')
         K = data.get('Potassium')
         temp = data.get('Temperature')
         humidity = data.get('Humidity')
@@ -44,10 +46,10 @@ def predict():
             result = "{} is the best crop to be cultivated right there".format(crop)
         else:
             result = "Sorry, we could not determine the best crop to be cultivated with the provided data."
-        
+
         # Return the result as a JSON response
         return jsonify({"result": result})
-    
+
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 

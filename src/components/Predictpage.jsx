@@ -1,28 +1,39 @@
 import React, { useState } from "react";
 import { Box, Button, TextField, Typography, Grid, Paper } from "@mui/material";
+import axios from "axios";
 
 const Predictpage = () => {
   const [formData, setFormData] = useState({
-    nitrogen: "",
-    phosphorus: "",
-    potassium: "",
-    temperature: "",
-    humidity: "",
-    ph: "",
-    rainfall: "",
+    Nitrogen: "",
+    Phosphorus: "",
+    Potassium: "",
+    Temperature: "",
+    Humidity: "",
+    pH: "",
+    Rainfall: "",
   });
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+const handleChange = (e) => {
+  setFormData({
+    ...formData,
+    [e.target.name]: parseFloat(e.target.value) || "",
+  });
+};
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic
-    console.log(formData);
+    try {
+      const response = await axios.post("http://127.0.0.1:5000/predict", formData);
+      setResult(response.data.result);
+      setError(null);
+    } catch (error) {
+      console.error("There was an error making the request:", error);
+      setError("Error making prediction. Please try again.");
+      setResult(null);
+    }
   };
 
   return (
@@ -56,183 +67,21 @@ const Predictpage = () => {
       >
         <form onSubmit={handleSubmit}>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Nitrogen"
-                variant="outlined"
-                name="nitrogen"
-                value={formData.nitrogen}
-                onChange={handleChange}
-                InputProps={{
-                  sx: {
-                    borderRadius: "10px",
-                    fontFamily: "ui-sans-serif",
-                    fontWeight: 700, // Thicker text
-                    borderWidth: 2, // Thicker border
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderWidth: 2,
-                    },
-                  },
-                }}
-                InputLabelProps={{
-                  sx: {
-                    fontFamily: "ui-sans-serif",
-                    fontWeight: 700, // Thicker label text
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Phosphorus"
-                variant="outlined"
-                name="phosphorus"
-                value={formData.phosphorus}
-                onChange={handleChange}
-                InputProps={{
-                  sx: {
-                    borderRadius: "10px",
-                    fontFamily: "ui-sans-serif",
-                    fontWeight: 700, // Thicker text
-                    borderWidth: 2, // Thicker border
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderWidth: 2,
-                    },
-                  },
-                }}
-                InputLabelProps={{
-                  sx: {
-                    fontFamily: "ui-sans-serif",
-                    fontWeight: 700, // Thicker label text
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Potassium"
-                variant="outlined"
-                name="potassium"
-                value={formData.potassium}
-                onChange={handleChange}
-                InputProps={{
-                  sx: {
-                    borderRadius: "10px",
-                    fontFamily: "ui-sans-serif",
-                    fontWeight: 700, // Thicker text
-                    borderWidth: 2, // Thicker border
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderWidth: 2,
-                    },
-                  },
-                }}
-                InputLabelProps={{
-                  sx: {
-                    fontFamily: "ui-sans-serif",
-                    fontWeight: 700, // Thicker label text
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Temperature"
-                variant="outlined"
-                name="temperature"
-                value={formData.temperature}
-                onChange={handleChange}
-                InputProps={{
-                  sx: {
-                    borderRadius: "10px",
-                    fontFamily: "ui-sans-serif",
-                    fontWeight: 700, // Thicker text
-                    borderWidth: 2, // Thicker border
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderWidth: 2,
-                    },
-                  },
-                }}
-                InputLabelProps={{
-                  sx: {
-                    fontFamily: "ui-sans-serif",
-                    fontWeight: 700, // Thicker label text
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Humidity"
-                variant="outlined"
-                name="humidity"
-                value={formData.humidity}
-                onChange={handleChange}
-                InputProps={{
-                  sx: {
-                    borderRadius: "10px",
-                    fontFamily: "ui-sans-serif",
-                    fontWeight: 700, // Thicker text
-                    borderWidth: 2, // Thicker border
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderWidth: 2,
-                    },
-                  },
-                }}
-                InputLabelProps={{
-                  sx: {
-                    fontFamily: "ui-sans-serif",
-                    fontWeight: 700, // Thicker label text
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="pH"
-                variant="outlined"
-                name="ph"
-                value={formData.ph}
-                onChange={handleChange}
-                InputProps={{
-                  sx: {
-                    borderRadius: "10px",
-                    fontFamily: "ui-sans-serif",
-                    fontWeight: 700, // Thicker text
-                    borderWidth: 2, // Thicker border
-                    "& .MuiOutlinedInput-notchedOutline": {
-                      borderWidth: 2,
-                    },
-                  },
-                }}
-                InputLabelProps={{
-                  sx: {
-                    fontFamily: "ui-sans-serif",
-                    fontWeight: 700, // Thicker label text
-                  },
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} container justifyContent="center">
-              <Grid item xs={12} sm={6}>
+            {Object.keys(formData).map((key) => (
+              <Grid item xs={12} sm={6} key={key}>
                 <TextField
                   fullWidth
-                  label="Rainfall"
+                  label={key.charAt(0).toUpperCase() + key.slice(1)}
                   variant="outlined"
-                  name="rainfall"
-                  value={formData.rainfall}
+                  name={key}
+                  value={formData[key]}
                   onChange={handleChange}
                   InputProps={{
                     sx: {
                       borderRadius: "10px",
                       fontFamily: "ui-sans-serif",
-                      fontWeight: 700, // Thicker text
-                      borderWidth: 2, // Thicker border
+                      fontWeight: 700,
+                      borderWidth: 2,
                       "& .MuiOutlinedInput-notchedOutline": {
                         borderWidth: 2,
                       },
@@ -241,12 +90,12 @@ const Predictpage = () => {
                   InputLabelProps={{
                     sx: {
                       fontFamily: "ui-sans-serif",
-                      fontWeight: 700, // Thicker label text
+                      fontWeight: 700,
                     },
                   }}
                 />
               </Grid>
-            </Grid>
+            ))}
             <Grid item xs={12} container justifyContent="center">
               <Button
                 type="submit"
@@ -266,6 +115,16 @@ const Predictpage = () => {
             </Grid>
           </Grid>
         </form>
+        {result && (
+          <Typography variant="h6" sx={{ mt: 2, color: "green" }}>
+            {result}
+          </Typography>
+        )}
+        {error && (
+          <Typography variant="h6" sx={{ mt: 2, color: "red" }}>
+            {error}
+          </Typography>
+        )}
       </Paper>
     </Box>
   );
