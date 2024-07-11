@@ -84,6 +84,7 @@ Special thanks to all contributors and supporters of this project.
 ### Video
 
 We have also created a video to provide an overview of Agrowise and its features. You can watch it here.
+https://res.cloudinary.com/dvlfsldbh/video/upload/v1720717370/WhatsApp_Video_2024-07-11_at_19.30.42_8d19afa1_unnl9d.mp4
 
 
 ---
