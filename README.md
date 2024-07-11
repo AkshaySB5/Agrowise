@@ -84,7 +84,7 @@ Special thanks to all contributors and supporters of this project.
 ### Video
 
 We have also created a video to provide an overview of Agrowise and its features. You can watch it here.
-https://github.com/AkshaySB5/Agrowise/assets/98323568/c68651c5-94be-49d0-8f01-3ec45303a268
+
 
 ---
 
