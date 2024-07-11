@@ -27,8 +27,8 @@ Agrowise is an innovative project aimed at leveraging the power of artificial in
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/agrowise.git
-    cd agrowise
+    git clone https://github.com/Agrowise/agrowise.git
+    cd Agrowise
     ```
 
 2. Install the required Python libraries:
